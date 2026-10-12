@@ -2,14 +2,84 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>내 포트폴리오</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홍길동의 포트폴리오</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; }
-        h1 { color: #333; }
+        /* 배경 및 전체 글꼴 설정 */
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 카드 형태의 컨테이너 */
+        .container {
+            max-width: 600px;
+            width: 90%;
+            background: white;
+            margin: 50px 0;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* 프로필 헤더 */
+        h1 { color: #2b4bee; margin-bottom: 5px; }
+        .subtitle { color: #666; font-size: 1.1em; margin-bottom: 30px; }
+
+        /* 섹션 스타일 */
+        .section { margin-bottom: 30px; }
+        .section h2 { border-bottom: 2px solid #2b4bee; padding-bottom: 5px; font-size: 1.3em; }
+
+        /* 링크 버튼 스타일 */
+        .links a {
+            display: inline-block;
+            background: #2b4bee;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+        .links a:hover { background: #1a33b8; }
     </style>
 </head>
 <body>
-    <h1>안녕하세요! 제 포트폴리오 사이트입니다.</h1>
-    <p>GitHub Pages로 만든 웹사이트입니다.</p>
+
+    <div class="container">
+        <!-- 프로필 기본 정보 -->
+        <h1>홍길동</h1>
+        <p class="subtitle">안녕하세요! 백엔드 개발자를 꿈꾸는 홍길동입니다.</p>
+
+        <!-- 자기소개 섹션 -->
+        <div class="section">
+            <h2>About Me</h2>
+            <p>새로운 기술을 배우고 문제를 해결하는 과정을 즐깁니다.</p>
+            <p>주로 Python과 Java를 공부하고 있으며, 웹 서비스 구축에 관심이 많습니다.</p>
+        </div>
+
+        <!-- 기술 스택 / 관심 분야 -->
+        <div class="section">
+            <h2>Skills</h2>
+            <ul>
+                <li>HTML / CSS / JavaScript</li>
+                <li>Python / Django</li>
+                <li>Git & GitHub</li>
+            </ul>
+        </div>
+
+        <!-- 연락처 및 소셜 링크 -->
+        <div class="section links">
+            <h2>Contact</h2>
+            <a href="https://github.com/stupid0408-stack" target="_blank">GitHub 바로가기</a>
+            <a href="mailto:내이메일@gmail.com">이메일 보내기</a>
+        </div>
+    </div>
+
 </body>
 </html>
