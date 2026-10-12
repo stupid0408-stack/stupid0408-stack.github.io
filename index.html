@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080f1e">
+<meta name="description" content="함승호의 비즈니스·데이터 분석 포트폴리오">
+<title>함승호 | Business & Data Portfolio</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg: #080f1e;
+  --surface: #101c30;
+  --surface2: #15243b;
+  --border: #263954;
+  --text: #f1f5fb;
+  --muted: #9aacc5;
+  --blue: #60a5fa;
+  --mint: #5eead4;
+  --max: 1120px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', 'Noto Sans KR', sans-serif;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+::selection { background: #245a84; color: white; }
+
+.container {
+  max-width: var(--max);
+  margin: auto;
+  padding: 0 28px;
+}
+
+nav {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(8,15,30,.86);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.nav-inner {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo span { color: var(--mint); }
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 26px;
+}
+
+.nav-links a {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  transition: color .2s;
+}
+
+.nav-links a:hover { color: var(--mint); }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 790px;
+  display: flex;
+  align-items: center;
+  padding: 160px 0 110px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  right: -220px;
+  top: 60px;
+  background: radial-gradient(circle,
+    rgba(56,189,248,.16), transparent 65%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--mint);
+  margin-bottom: 22px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 6.5vw, 78px);
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 1.35;
+  margin-bottom: 26px;
+}
+
+.gradient {
+  background: linear-gradient(110deg, var(--blue), var(--mint));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-desc {
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 650px;
+  margin-bottom: 35px;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 23px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 800;
+  transition: .25s;
+}
+
+.btn-primary {
+  background: var(--mint);
+  color: #071420;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  background: #a7f3d0;
+}
+
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+.hero-meta {
+  margin-top: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 45px;
+}
+
+.meta-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+section.content-section {
+  padding: 110px 0;
+  scroll-margin-top: 65px;
+}
+
+.alt { background: #0c1728; }
+
+.section-heading {
+  margin-bottom: 46px;
+}
+
+.section-heading h2 {
+  font-size: clamp(29px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  margin-top: 12px;
+  max-width: 700px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 30px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 30px;
+}
+
+.panel h3 {
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.panel p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 13px;
+}
+
+.panel p:last-child { margin-bottom: 0; }
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  padding: 13px 0;
+  font-size: 13px;
+}
+
+.info-row:last-child { border-bottom: none; }
+.info-row span { color: var(--muted); }
+.info-row strong { text-align: right; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.tag {
+  border: 1px solid #2b4960;
+  background: #142c40;
+  color: #a5e5e5;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 22px;
+}
+
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 30px;
+  transition: transform .3s, border-color .3s;
+}
+
+.project-card:hover {
+  transform: translateY(-7px);
+  border-color: var(--blue);
+}
+
+.project-number {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--mint);
+}
+
+.project-card h3 {
+  font-size: 21px;
+  line-height: 1.5;
+  margin: 18px 0 12px;
+}
+
+.project-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.project-category {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.project-card .tags { margin-top: 18px; }
+
+.timeline {
+  position: relative;
+  border-left: 1px solid #38516e;
+  padding-left: 30px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 42px;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -37px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 5px #143247;
+}
+
+.timeline-date {
+  color: var(--mint);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.timeline-item h3 {
+  margin: 8px 0;
+  font-size: 19px;
+}
+
+.timeline-item p {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 750px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 20px;
+}
+
+.skill-card {
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.skill-card h3 {
+  color: var(--mint);
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.skill-card p {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 7px 0;
+}
+
+.award-list {
+  display: grid;
+  gap: 14px;
+}
+
+.award {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 22px 25px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.award strong { font-size: 15px; }
+.award p { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.award time { color: var(--mint); font-size: 12px; white-space: nowrap; }
+
+.contact-panel {
+  text-align: center;
+  padding: 70px 25px;
+  border-radius: 20px;
+  border: 1px solid #2d5570;
+  background: linear-gradient(135deg,#10253c,#101b30);
+}
+
+.contact-panel h2 {
+  font-size: clamp(28px,4vw,42px);
+  margin-bottom: 14px;
+}
+
+.contact-panel p {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.email-address {
+  display: block;
+  font-size: clamp(18px,3vw,26px);
+  color: var(--mint);
+  font-weight: 800;
+  margin-bottom: 25px;
+  overflow-wrap: anywhere;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  color: #7d91ab;
+  font-size: 12px;
+  text-align: center;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s, transform .7s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media(max-width: 800px) {
+  .about-grid, .card-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: repeat(2,1fr); }
+  .hero { min-height: 680px; }
+}
+
+@media(max-width: 560px) {
+  .container { padding: 0 20px; }
+  .nav-inner { align-items: flex-start; padding-top: 15px; padding-bottom: 15px; flex-direction: column; }
+  .nav-links { gap: 14px; }
+  .nav-links a { font-size: 11px; }
+  .hero { padding-top: 185px; min-height: 700px; }
+  .hero h1 { letter-spacing: -1.5px; }
+  .hero-desc { font-size: 15px; }
+  .hero-meta { gap: 25px; margin-top: 45px; }
+  section.content-section { padding: 75px 0; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .panel, .project-card { padding: 23px; }
+  .award { flex-direction: column; gap: 8px; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="logo" href="#home">SEUNGHO<span>.</span></a>
+    <div class="nav-links">
+      <a href="#about">ABOUT</a>
+      <a href="#projects">PROJECTS</a>
+      <a href="#experience">EXPERIENCE</a>
+      <a href="#skills">SKILLS</a>
+      <a href="#awards">AWARDS</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<header class="hero" id="home">
+  <div class="container">
+    <span class="eyebrow">Business · Data · Strategy</span>
+    <h1>
+      데이터를 읽고,<br>
+      현장을 이해하며,<br>
+      <span class="gradient">변화를 만들어갑니다.</span>
+    </h1>
+    <p class="hero-desc">
+      안녕하세요, 함승호입니다.<br>
+      국민대학교 경영정보학부에서 비즈니스와 IT를 공부하며
+      데이터 분석, 마케팅, 서비스 운영에 관심을 넓혀왔습니다.
+      분석을 실행 가능한 전략으로 연결하는 사람이 되고자 합니다.
+    </p>
+    <div class="hero-buttons">
+      <a class="btn btn-primary" href="#projects">프로젝트 살펴보기 ↗</a>
+      <a class="btn btn-outline" href="#contact">Contact Me</a>
+    </div>
+    <div class="hero-meta">
+      <div>
+        <div class="meta-label">University</div>
+        <div class="meta-value">Kookmin University</div>
+      </div>
+      <div>
+        <div class="meta-label">Major</div>
+        <div class="meta-value">Management Information Systems</div>
+      </div>
+      <div>
+        <div class="meta-label">Interests</div>
+        <div class="meta-value">Business / Data / Marketing</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="content-section alt" id="about">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">01 / About Me</span>
+      <h2>숫자 너머의 현장을 보는 사람</h2>
+      <p>분석력과 실행력을 함께 갖춘 비즈니스 인재를 지향합니다.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="panel reveal">
+        <h3>Who I Am</h3>
+        <p>
+          경영정보학을 전공하며 데이터베이스, 정보기술,
+          비즈니스 문제 해결 방법을 학습했습니다.
+        </p>
+        <p>
+          대학 프로젝트에서는 AI를 활용한 서비스 개선,
+          ESG 경영 아이디어, 소비자 분석 등을 경험했습니다.
+        </p>
+        <p>
+          또한 축구단 마케팅 활동, 해외 교환학생 경험,
+          프랜차이즈 영업관리 교육을 통해 다양한 이해관계자의
+          관점에서 문제를 바라보는 역량을 길렀습니다.
+        </p>
+        <div class="tags">
+          <span class="tag">Problem Solving</span>
+          <span class="tag">Data Analysis</span>
+          <span class="tag">Business Strategy</span>
+          <span class="tag">Communication</span>
+        </div>
+      </div>
+
+      <div class="panel reveal">
+        <h3>Profile</h3>
+        <div class="info-row">
+          <span>Name</span><strong>함승호</strong>
+        </div>
+        <div class="info-row">
+          <span>University</span><strong>국민대학교</strong>
+        </div>
+        <div class="info-row">
+          <span>Major</span><strong>경영정보학부</strong>
+        </div>
+        <div class="info-row">
+          <span>Exchange</span><strong>University of Hertfordshire</strong>
+        </div>
+        <div class="info-row">
+          <span>Career Interest</span><strong>영업관리 · F&B · 데이터 분석</strong>
+        </div>
+        <div class="info-row">
+          <span>Language</span><strong>한국어 · 영어 · 스페인어</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="content-section" id="projects">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">02 / Selected Projects</span>
+      <h2>Projects & Case Studies</h2>
+      <p>문제를 정의하고 분석을 통해 해결 방향을 제시한 프로젝트입니다.</p>
+    </div>
+
+    <div class="card-grid">
+      <article class="project-card reveal">
+        <div class="project-number">PROJECT 01</div>
+        <h3>프랜차이즈 매출 개선 전략</h3>
+        <p>
+          프랜차이즈 영업관리 실무 교육에서
+          매장의 월별·요일별·시간대별 매출과 상권 특성을
+          분석했습니다. 현장 관찰 및 인터뷰를 바탕으로
+          POP, 고객 유입, 판매 촉진 개선안을 제안했습니다.
+        </p>
+        <div class="project-category">BUSINESS STRATEGY / SALES ANALYSIS</div>
+        <div class="tags">
+          <span class="tag">매출 분석</span>
+          <span class="tag">상권 분석</span>
+          <span class="tag">LSM</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-number">PROJECT 02</div>
+        <h3>AI 기반 대학 학식 대기열 개선</h3>
+        <p>
+          국민대학교 캡스톤 프로젝트에서
+          대학 식당의 대기 문제를 해결하기 위한
+          AI 활용 아이디어를 제안했습니다.
+          사용자 불편과 서비스 운영 효율을 중심으로
+          개선 방향을 설계했습니다.
+        </p>
+        <div class="project-category">AI / SERVICE INNOVATION</div>
+        <div class="tags">
+          <span class="tag">AI</span>
+          <span class="tag">서비스 기획</span>
+          <span class="tag">문제 해결</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-number">PROJECT 03</div>
+        <h3>AI 기반 병원 ESG 경영 제안</h3>
+        <p>
+          경영정보학부 ESG 경영 학술제에서
+          인공지능 기술을 활용한 병원 ESG 경영 방안을
+          제안했습니다. 기술의 활용 가능성을
+          경영적 관점에서 분석했습니다.
+        </p>
+        <div class="project-category">ESG / AI BUSINESS</div>
+        <div class="tags">
+          <span class="tag">ESG</span>
+          <span class="tag">AI</span>
+          <span class="tag">경영 전략</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-number">PROJECT 04</div>
+        <h3>월드콘 마케팅 전략 프로젝트</h3>
+        <p>
+          소비자 조사와 FGI를 통해 시장 및 고객의
+          니즈를 분석하고, 브랜드 포지셔닝과
+          마케팅 전략을 수립했습니다.
+          아이디어의 실행 가능성을 검토하는 과정까지 경험했습니다.
+        </p>
+        <div class="project-category">MARKETING / CONSUMER RESEARCH</div>
+        <div class="tags">
+          <span class="tag">FGI</span>
+          <span class="tag">시장 조사</span>
+          <span class="tag">포지셔닝</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="content-section alt" id="experience">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">03 / Experience</span>
+      <h2>Experience & Activities</h2>
+      <p>학교 밖에서 직접 기획하고 협업하며 배운 경험들입니다.</p>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <div class="timeline-date">2026.09 — 2026.10</div>
+        <h3>코멘토 · 프랜차이즈 영업관리 실무과정</h3>
+        <p>
+          프랜차이즈 본사의 영업관리 업무를 학습하고,
+          상권 분석과 매출 개선 전략 수립 등
+          현업 기반 과제를 수행했습니다.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2024.07 — 2024.10</div>
+        <h3>미래내일 일경험 · 지역 농산물 홍보</h3>
+        <p>
+          철원 옥수수 농장 관련 홍보 프로젝트에서
+          인터뷰, 체험 콘텐츠 기획, 영상 제작 및
+          바이럴 마케팅 활동에 참여했습니다.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2023.09 — 2024.01</div>
+        <h3>University of Hertfordshire · 교환학생</h3>
+        <p>
+          영국 교환학생으로 현지 대학 수업을 수강하고
+          다양한 국적의 학생들과 교류하며
+          글로벌 커뮤니케이션 역량을 확장했습니다.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2023.03 — 2023.08</div>
+        <h3>SITA · 부학회장</h3>
+        <p>
+          학술 활동과 SQLD 스터디를 운영하며
+          데이터베이스 학습 및 구성원 간 협업을 지원했습니다.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2022.02 — 2022.11</div>
+        <h3>FC안양 · 펀크리에이터 8기</h3>
+        <p>
+          프로축구단 대학생 마케터로 활동하며
+          경기장 프로모션과 팬 참여 행사를 기획했습니다.
+          가족·어린이 대상 프로그램의 현장 진행과 MC를 담당했습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="content-section" id="skills">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">04 / Skills & Certifications</span>
+      <h2>Skills & Expertise</h2>
+      <p>비즈니스 분석, 기술 이해, 글로벌 소통 역량을 발전시키고 있습니다.</p>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <h3>Business</h3>
+        <p>시장 및 상권 분석</p>
+        <p>마케팅 전략 기획</p>
+        <p>고객 니즈 분석</p>
+        <p>프랜차이즈 영업관리</p>
+      </div>
+
+      <div class="skill-card reveal">
+        <h3>Data & IT</h3>
+        <p>SQL / Database</p>
+        <p>데이터 기반 문제 정의</p>
+        <p>비즈니스 IT 이해</p>
+        <p>AI 서비스 기획</p>
+      </div>
+
+      <div class="skill-card reveal">
+        <h3>Communication</h3>
+        <p>영어 커뮤니케이션</p>
+        <p>팀 프로젝트 협업</p>
+        <p>발표 및 행사 진행</p>
+        <p>이해관계자 소통</p>
+      </div>
+
+      <div class="skill-card reveal">
+        <h3>Certifications</h3>
+        <p>SQLD · 2024</p>
+        <p>컴퓨터활용능력 2급 · 2026</p>
+        <p>운전면허 2종 보통 · 2022</p>
+      </div>
+
+      <div class="skill-card reveal">
+        <h3>Languages</h3>
+        <p>OPIc IH · 2026</p>
+        <p>DELE A2 · 2026</p>
+        <p>영국 교환학생 경험</p>
+      </div>
+
+      <div class="skill-card reveal">
+        <h3>Interests</h3>
+        <p>F&B 산업</p>
+        <p>브랜드 및 프랜차이즈 전략</p>
+        <p>축구 · 크로스핏</p>
+        <p>글로벌 비즈니스</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="content-section alt" id="awards">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">05 / Honors & Awards</span>
+      <h2>Awards & Achievements</h2>
+      <p>학업과 프로젝트 활동을 통해 얻은 주요 성과입니다.</p>
+    </div>
+
+    <div class="award-list reveal">
+      <div class="award">
+        <div>
+          <strong>국민대학교 경영대학 K-Star 장학생</strong>
+          <p>학업 성과와 교내 활동 및 성장 가능성을 인정받아 선발</p>
+        </div>
+        <time>2024.05</time>
+      </div>
+
+      <div class="award">
+        <div>
+          <strong>국민대학교 캡스톤 경진대회 우수상</strong>
+          <p>AI 기반 대학 학식 대기열 개선 프로젝트</p>
+        </div>
+        <time>2023.06</time>
+      </div>
+
+      <div class="award">
+        <div>
+          <strong>경영정보학부 ESG 경영 학술제 최우수상</strong>
+          <p>AI 기반 병원 ESG 경영 방안 제안</p>
+        </div>
+        <time>2022.07</time>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="content-section" id="contact">
+  <div class="container">
+    <div class="contact-panel reveal">
+      <span class="eyebrow">06 / Get In Touch</span>
+      <h2>Let's Connect.</h2>
+      <p>
+        새로운 아이디어와 기회를 연결하는 대화를 환영합니다.<br>
+        아래 이메일을 통해 연락하실 수 있습니다.
+      </p>
+      <a class="email-address" href="mailto:hammy0408@gmail.com">
+        hammy0408@gmail.com
+      </a>
+      <a class="btn btn-primary" href="mailto:hammy0408@gmail.com">
+        이메일 보내기 ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    © <span id="year"></span> Ham Seungho.
+    Built with curiosity, data & purpose.
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.08 }
+);
+
+document.querySelectorAll('.reveal').forEach((element) => {
+  observer.observe(element);
+});
+</script>
+
+</body>
+</html>
