@@ -599,6 +599,78 @@ footer {
   text-align: center;
 }
 
+/* ===== Guestbook ===== */
+.guestbook-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 30px;
+  align-items: start;
+}
+.guestbook-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.gb-field { display: flex; flex-direction: column; gap: 7px; }
+.gb-field label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: var(--muted);
+}
+.gb-input, .gb-textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.gb-input:focus, .gb-textarea:focus {
+  outline: none;
+  border-color: var(--mint);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint) 18%, transparent);
+}
+.gb-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+.gb-submit { align-self: flex-start; border: none; }
+.gb-submit:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.gb-status {
+  font-size: 13px;
+  min-height: 20px;
+  color: var(--muted);
+}
+.gb-status.error { color: #f98080; }
+.gb-status.success { color: var(--mint); }
+
+.gb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 540px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.gb-entry {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+.gb-entry-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.gb-entry-name { font-weight: 800; font-size: 14px; color: var(--mint); }
+.gb-entry-date { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.gb-entry-msg { font-size: 14px; color: var(--text); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+.gb-empty { color: var(--muted); font-size: 14px; padding: 10px 2px; }
+
 /* ===== Reveal ===== */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s, transform .7s; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -611,7 +683,7 @@ footer {
   .stats-grid { grid-template-columns: repeat(2,1fr); }
 }
 @media(max-width: 800px) {
-  .about-grid, .card-grid { grid-template-columns: 1fr; }
+  .about-grid, .card-grid, .guestbook-grid { grid-template-columns: 1fr; }
   .skills-grid { grid-template-columns: repeat(2,1fr); }
 }
 @media(max-width: 680px) {
@@ -670,6 +742,7 @@ footer {
         <a href="#experience">EXPERIENCE</a>
         <a href="#skills">SKILLS</a>
         <a href="#awards">AWARDS</a>
+        <a href="#guestbook">GUESTBOOK</a>
         <a href="#contact">CONTACT</a>
       </div>
       <button class="icon-btn" id="themeBtn" aria-label="테마 전환" title="테마 전환">🌙</button>
@@ -1025,6 +1098,42 @@ footer {
   </div>
 </section>
 
+<!-- GUESTBOOK -->
+<section class="content-section" id="guestbook">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">06 / Guestbook</span>
+      <h2>방명록</h2>
+      <p>방문해 주셔서 감사합니다. 한마디 남겨주세요. 남긴 메시지는 아래에 실시간으로 표시됩니다.</p>
+    </div>
+
+    <div class="guestbook-grid">
+      <div class="panel reveal">
+        <h3>메시지 남기기</h3>
+        <form class="guestbook-form" id="gbForm" autocomplete="off">
+          <div class="gb-field">
+            <label for="gbName">이름</label>
+            <input class="gb-input" id="gbName" type="text" maxlength="40" placeholder="성함을 입력해 주세요" required>
+          </div>
+          <div class="gb-field">
+            <label for="gbMessage">메시지</label>
+            <textarea class="gb-textarea" id="gbMessage" maxlength="500" placeholder="자유롭게 메시지를 남겨주세요" required></textarea>
+          </div>
+          <button class="btn btn-primary gb-submit" id="gbSubmit" type="submit">남기기 ↗</button>
+          <div class="gb-status" id="gbStatus" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="panel reveal d1">
+        <h3>남겨주신 메시지 <span id="gbCount" style="color:var(--muted);font-weight:600;font-size:13px;"></span></h3>
+        <div class="gb-list" id="gbList">
+          <div class="gb-empty" id="gbLoading">불러오는 중...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section class="content-section" id="contact">
   <div class="container">
@@ -1163,6 +1272,123 @@ if (!prefersReduced) {
     });
     card.addEventListener('mouseleave', () => { card.style.transform = ''; });
   });
+}
+</script>
+
+<!-- ===== Supabase 방명록 ===== -->
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+/* ───────────────────────────────────────────────
+   여기 두 값만 본인 Supabase 프로젝트 값으로 교체하세요.
+   Supabase 대시보드 → Project Settings → Data API(또는 API)
+   - Project URL  → SUPABASE_URL
+   - anon public key → SUPABASE_ANON_KEY
+   (anon key는 브라우저에 노출돼도 되는 공개 키입니다. RLS로 보호됩니다.)
+─────────────────────────────────────────────── */
+const SUPABASE_URL = 'https://romdlvavmsjzadgjeyoq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbWRsdmF2bXNqemFkZ2pleW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NzkxMTksImV4cCI6MjEwOTE1NTExOX0.HYlABrF23f55k6fJY2dDmgIuA7I-9ha-mx8XTf8JBi0';
+
+const form = document.getElementById('gbForm');
+const nameInput = document.getElementById('gbName');
+const msgInput = document.getElementById('gbMessage');
+const submitBtn = document.getElementById('gbSubmit');
+const statusEl = document.getElementById('gbStatus');
+const listEl = document.getElementById('gbList');
+const countEl = document.getElementById('gbCount');
+
+function setStatus(text, type) {
+  statusEl.textContent = text;
+  statusEl.className = 'gb-status' + (type ? ' ' + type : '');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function formatDate(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString('ko-KR', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit'
+    });
+  } catch { return ''; }
+}
+
+function renderEntries(rows) {
+  if (!rows || rows.length === 0) {
+    listEl.innerHTML = '<div class="gb-empty">아직 남겨진 메시지가 없습니다. 첫 메시지를 남겨보세요.</div>';
+    countEl.textContent = '';
+    return;
+  }
+  countEl.textContent = '(' + rows.length + ')';
+  listEl.innerHTML = rows.map(r => `
+    <div class="gb-entry">
+      <div class="gb-entry-head">
+        <span class="gb-entry-name">${escapeHtml(r.name)}</span>
+        <time class="gb-entry-date">${formatDate(r.created_at)}</time>
+      </div>
+      <div class="gb-entry-msg">${escapeHtml(r.message)}</div>
+    </div>
+  `).join('');
+}
+
+/* 설정이 아직 안 된 경우 안내 */
+const isConfigured =
+  SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.startsWith('YOUR_');
+
+if (!isConfigured) {
+  listEl.innerHTML = '<div class="gb-empty">⚙️ Supabase 설정이 필요합니다. index.html 하단의 SUPABASE_URL / SUPABASE_ANON_KEY 값을 입력하세요.</div>';
+  setStatus('Supabase 연결 전입니다. 설정을 완료하면 작동합니다.', 'error');
+  submitBtn.disabled = true;
+} else {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function loadEntries() {
+    const { data, error } = await supabase
+      .from('guestbook')
+      .select('name, message, created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
+    if (error) {
+      listEl.innerHTML = '<div class="gb-empty">메시지를 불러오지 못했습니다: ' + escapeHtml(error.message) + '</div>';
+      return;
+    }
+    renderEntries(data);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = nameInput.value.trim();
+    const message = msgInput.value.trim();
+    if (!name || !message) {
+      setStatus('이름과 메시지를 모두 입력해 주세요.', 'error');
+      return;
+    }
+    submitBtn.disabled = true;
+    setStatus('저장 중...', '');
+    const { error } = await supabase.from('guestbook').insert({ name, message });
+    if (error) {
+      setStatus('저장에 실패했습니다: ' + error.message, 'error');
+      submitBtn.disabled = false;
+      return;
+    }
+    setStatus('메시지가 등록되었습니다. 감사합니다!', 'success');
+    form.reset();
+    submitBtn.disabled = false;
+    loadEntries();
+  });
+
+  /* 실시간 반영: 다른 방문자가 남긴 메시지도 즉시 표시 */
+  supabase
+    .channel('guestbook-changes')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guestbook' }, loadEntries)
+    .subscribe();
+
+  loadEntries();
 }
 </script>
 
