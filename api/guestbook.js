@@ -19,9 +19,7 @@ export default async function handler(req, res) {
   // 환경 변수 누락 시 안전하게 실패
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(500).json({
-      error: '서버 설정이 완료되지 않았습니다. 환경 변수(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)를 확인하세요.',
-      _hasUrl: !!SUPABASE_URL,
-      _hasKey: !!SUPABASE_SERVICE_ROLE_KEY
+      error: '서버 설정이 완료되지 않았습니다. 환경 변수(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)를 확인하세요.'
     });
   }
 
@@ -38,7 +36,7 @@ export default async function handler(req, res) {
       .limit(100);
 
     if (error) {
-      return res.status(500).json({ error: '조회에 실패했습니다.', _debug: error.message, _hint: error.hint, _code: error.code });
+      return res.status(500).json({ error: '조회에 실패했습니다.' });
     }
     return res.status(200).json({ entries: data });
   }

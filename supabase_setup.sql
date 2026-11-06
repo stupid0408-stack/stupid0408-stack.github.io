@@ -32,8 +32,14 @@ drop policy if exists "guestbook public insert" on public.guestbook;
 
 -- 5) 브라우저(anon) 역할의 직접 권한 회수
 --    (서버 함수의 service_role 키는 RLS/권한을 우회하므로 영향 없음)
-revoke all   on table public.guestbook from anon;
-revoke insert, select on table public.guestbook from anon;
+revoke all on table public.guestbook from anon;
+
+-- 6) 서버 함수(service_role)에 테이블 접근 권한 부여
+--    "Automatically expose new tables"를 꺼둔 경우 새 테이블에 권한이
+--    자동으로 붙지 않으므로, 서버 전용 역할에 직접 권한을 부여합니다.
+--    (이것이 없으면 "permission denied for table guestbook" 오류가 납니다.)
+grant select, insert on table public.guestbook to service_role;
+grant usage, select on all sequences in schema public to service_role;
 
 -- =====================================================================
 -- 참고: 아래는 실행할 필요 없음 (서버 함수 구조에서는 불필요)
