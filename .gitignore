@@ -1,0 +1,9 @@
+# Kiro IDE 설정 (배포와 무관)
+.kiro/
+
+# OS 생성 파일
+.DS_Store
+
+# 에디터 설정
+.vscode/
+.idea/
