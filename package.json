@@ -1,0 +1,10 @@
+{
+  "name": "stupid0408-portfolio",
+  "version": "1.0.0",
+  "description": "포트폴리오 + Supabase 방명록 (Vercel 서버 함수 경유)",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

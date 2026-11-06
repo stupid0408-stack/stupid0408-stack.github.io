@@ -7,3 +7,12 @@
 # 에디터 설정
 .vscode/
 .idea/
+
+# 의존성 (Vercel이 자동 설치)
+node_modules/
+
+# 환경 변수 (비밀 키 — 절대 커밋 금지)
+.env
+.env.*
+!.env.example
+.vercel

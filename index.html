@@ -1113,11 +1113,11 @@ footer {
         <form class="guestbook-form" id="gbForm" autocomplete="off">
           <div class="gb-field">
             <label for="gbName">이름</label>
-            <input class="gb-input" id="gbName" type="text" maxlength="40" placeholder="성함을 입력해 주세요" required>
+            <input class="gb-input" id="gbName" type="text" minlength="2" maxlength="12" placeholder="별명을 입력해 주세요 (2~12자)" required>
           </div>
           <div class="gb-field">
             <label for="gbMessage">메시지</label>
-            <textarea class="gb-textarea" id="gbMessage" maxlength="500" placeholder="자유롭게 메시지를 남겨주세요" required></textarea>
+            <textarea class="gb-textarea" id="gbMessage" maxlength="100" placeholder="한 줄 메시지를 남겨주세요 (최대 100자)" required></textarea>
           </div>
           <button class="btn btn-primary gb-submit" id="gbSubmit" type="submit">남기기 ↗</button>
           <div class="gb-status" id="gbStatus" role="status" aria-live="polite"></div>
@@ -1275,20 +1275,18 @@ if (!prefersReduced) {
 }
 </script>
 
-<!-- ===== Supabase 방명록 ===== -->
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+<!-- ===== 방명록 (Vercel 서버 함수 /api/guestbook 경유) ===== -->
+<script>
+/* 이 스크립트는 Supabase에 직접 접근하지 않습니다.
+   같은 사이트의 서버 함수(/api/guestbook)만 호출하고,
+   실제 Supabase 저장/조회는 서버(api/guestbook.js)에서 수행합니다.
+   따라서 브라우저 코드에 키가 전혀 들어가지 않습니다. */
 
-/* ───────────────────────────────────────────────
-   여기 두 값만 본인 Supabase 프로젝트 값으로 교체하세요.
-   Supabase 대시보드 → Project Settings → Data API(또는 API)
-   - Project URL  → SUPABASE_URL
-   - anon public key → SUPABASE_ANON_KEY
-   (anon key는 브라우저에 노출돼도 되는 공개 키입니다. RLS로 보호됩니다.)
-─────────────────────────────────────────────── */
-const SUPABASE_URL = 'https://romdlvavmsjzadgjeyoq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvbWRsdmF2bXNqemFkZ2pleW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NzkxMTksImV4cCI6MjEwOTE1NTExOX0.HYlABrF23f55k6fJY2dDmgIuA7I-9ha-mx8XTf8JBi0';
+const API_URL = '/api/guestbook';
 
+/* 입력 제한 (서버와 동일하게 맞춤) */
+const NAME_MIN = 2, NAME_MAX = 12;
+const MSG_MIN = 1, MSG_MAX = 100;
 const form = document.getElementById('gbForm');
 const nameInput = document.getElementById('gbName');
 const msgInput = document.getElementById('gbMessage');
@@ -1336,60 +1334,63 @@ function renderEntries(rows) {
   `).join('');
 }
 
-/* 설정이 아직 안 된 경우 안내 */
-const isConfigured =
-  SUPABASE_URL.startsWith('http') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.startsWith('YOUR_');
+/* 목록 불러오기: GET /api/guestbook */
+async function loadEntries() {
+  try {
+    const res = await fetch(API_URL, { method: 'GET' });
+    if (!res.ok) throw new Error('서버 응답 오류');
+    const data = await res.json();
+    renderEntries(data.entries);
+  } catch (err) {
+    listEl.innerHTML = '<div class="gb-empty">메시지를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
+  }
+}
 
-if (!isConfigured) {
-  listEl.innerHTML = '<div class="gb-empty">⚙️ Supabase 설정이 필요합니다. index.html 하단의 SUPABASE_URL / SUPABASE_ANON_KEY 값을 입력하세요.</div>';
-  setStatus('Supabase 연결 전입니다. 설정을 완료하면 작동합니다.', 'error');
-  submitBtn.disabled = true;
-} else {
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* 메시지 저장: POST /api/guestbook */
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = nameInput.value.trim();
+  const message = msgInput.value.trim();
 
-  async function loadEntries() {
-    const { data, error } = await supabase
-      .from('guestbook')
-      .select('name, message, created_at')
-      .order('created_at', { ascending: false })
-      .limit(100);
-    if (error) {
-      listEl.innerHTML = '<div class="gb-empty">메시지를 불러오지 못했습니다: ' + escapeHtml(error.message) + '</div>';
-      return;
-    }
-    renderEntries(data);
+  /* 브라우저 1차 검증 (서버에서도 동일하게 재검증함) */
+  if (name.length < NAME_MIN || name.length > NAME_MAX) {
+    setStatus(`별명은 ${NAME_MIN}~${NAME_MAX}자여야 합니다.`, 'error');
+    return;
+  }
+  if (message.length < MSG_MIN || message.length > MSG_MAX) {
+    setStatus(`메시지는 ${MSG_MIN}~${MSG_MAX}자여야 합니다.`, 'error');
+    return;
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = nameInput.value.trim();
-    const message = msgInput.value.trim();
-    if (!name || !message) {
-      setStatus('이름과 메시지를 모두 입력해 주세요.', 'error');
-      return;
-    }
-    submitBtn.disabled = true;
-    setStatus('저장 중...', '');
-    const { error } = await supabase.from('guestbook').insert({ name, message });
-    if (error) {
-      setStatus('저장에 실패했습니다: ' + error.message, 'error');
+  submitBtn.disabled = true;
+  setStatus('저장 중...', '');
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, message })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      /* 서버가 거절한 경우: 성공으로 표시하지 않음 */
+      setStatus(data.error || '저장에 실패했습니다.', 'error');
       submitBtn.disabled = false;
       return;
     }
+
     setStatus('메시지가 등록되었습니다. 감사합니다!', 'success');
     form.reset();
     submitBtn.disabled = false;
     loadEntries();
-  });
+  } catch (err) {
+    setStatus('네트워크 오류로 저장에 실패했습니다.', 'error');
+    submitBtn.disabled = false;
+  }
+});
 
-  /* 실시간 반영: 다른 방문자가 남긴 메시지도 즉시 표시 */
-  supabase
-    .channel('guestbook-changes')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guestbook' }, loadEntries)
-    .subscribe();
-
-  loadEntries();
-}
+loadEntries();
 </script>
 
 </body>
