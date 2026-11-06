@@ -23,7 +23,7 @@ Supabase (PostgreSQL: guestbook 테이블)
 
 | 플랫폼 | 주소 | 비고 |
 |--------|------|------|
-| Vercel (실습 메인) | (여기에 Vercel 주소 입력 — 예: https://xxxx.vercel.app) | 서버 함수 + Supabase |
+| Vercel (실습 메인) | https://stupid0408-stackgithubio.vercel.app | 서버 함수 + Supabase |
 | GitHub Pages | https://stupid0408-stack.github.io | 정적 화면만 (서버 함수는 동작하지 않음) |
 
 > 서버 함수(`/api/guestbook`)는 **Vercel 주소에서만** 동작합니다.
