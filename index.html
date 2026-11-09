@@ -490,11 +490,11 @@ section.content-section {
 .tag[data-desc]::after {
   content: attr(data-desc);
   position: absolute;
-  left: 50%;
+  left: 0;
   bottom: calc(100% + 10px);
-  transform: translateX(-50%) translateY(6px);
+  transform: translateY(6px);
   width: max-content;
-  max-width: 240px;
+  max-width: min(260px, 78vw);
   padding: 9px 12px;
   border-radius: 10px;
   background: var(--surface2);
@@ -505,6 +505,7 @@ section.content-section {
   line-height: 1.5;
   text-align: left;
   white-space: normal;
+  word-break: keep-all;
   box-shadow: var(--shadow);
   opacity: 0;
   pointer-events: none;
@@ -514,9 +515,9 @@ section.content-section {
 .tag[data-desc]::before {
   content: "";
   position: absolute;
-  left: 50%;
+  left: 16px;
   bottom: calc(100% + 4px);
-  transform: translateX(-50%) translateY(6px);
+  transform: translateY(6px);
   border: 6px solid transparent;
   border-top-color: var(--border);
   opacity: 0;
@@ -529,7 +530,7 @@ section.content-section {
 .tag[data-desc]:hover::before,
 .tag[data-desc]:focus::before {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 .tag[data-desc]:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
 
@@ -545,7 +546,7 @@ section.content-section {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 32px;
-  overflow: hidden;
+  overflow: visible;
   transition: transform .3s, border-color .3s, box-shadow .3s;
   transform-style: preserve-3d;
 }
@@ -553,10 +554,12 @@ section.content-section {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: radial-gradient(500px circle at var(--mx,50%) var(--my,0%),
     rgba(94,234,212,.12), transparent 45%);
   opacity: 0;
   transition: opacity .3s;
+  pointer-events: none;
 }
 .project-card:hover::before { opacity: 1; }
 .project-card:hover {
