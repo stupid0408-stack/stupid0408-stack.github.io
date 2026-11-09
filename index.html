@@ -372,12 +372,42 @@ section.content-section {
   margin-top: 70px;
 }
 .stat {
+  display: block;
   text-align: center;
   padding: 26px 18px;
   border-radius: 16px;
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--surface) 80%, transparent);
   backdrop-filter: blur(6px);
+  color: inherit;
+  cursor: pointer;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.stat:hover {
+  transform: translateY(-5px);
+  border-color: var(--mint);
+  box-shadow: var(--shadow);
+}
+.stat:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
+.stat::after {
+  content: "자세히 보기 ↓";
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: var(--mint);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .25s, transform .25s;
+}
+.stat:hover::after,
+.stat:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 .stat-num {
   font-size: clamp(30px, 4vw, 42px);
@@ -838,10 +868,10 @@ footer {
     </div>
 
     <div class="stats-grid">
-      <div class="stat reveal"><div class="stat-num" data-count="4"><span>0</span></div><div class="stat-label">주요 프로젝트</div></div>
-      <div class="stat reveal d1"><div class="stat-num" data-count="3"><span>0</span></div><div class="stat-label">수상 경력</div></div>
-      <div class="stat reveal d2"><div class="stat-num" data-count="3"><span>0</span><span class="suffix">개국어</span></div><div class="stat-label">구사 언어</div></div>
-      <div class="stat reveal d3"><div class="stat-num" data-count="5"><span>0</span><span class="suffix">+</span></div><div class="stat-label">대외 활동</div></div>
+      <a class="stat reveal" href="#projects" aria-label="주요 프로젝트 섹션으로 이동"><div class="stat-num" data-count="4"><span>0</span></div><div class="stat-label">주요 프로젝트</div></a>
+      <a class="stat reveal d1" href="#awards" aria-label="수상 경력 섹션으로 이동"><div class="stat-num" data-count="3"><span>0</span></div><div class="stat-label">수상 경력</div></a>
+      <a class="stat reveal d2" href="#skills" aria-label="구사 언어가 포함된 Skills 섹션으로 이동"><div class="stat-num" data-count="3"><span>0</span><span class="suffix">개국어</span></div><div class="stat-label">구사 언어</div></a>
+      <a class="stat reveal d3" href="#experience" aria-label="대외 활동(Experience) 섹션으로 이동"><div class="stat-num" data-count="5"><span>0</span><span class="suffix">+</span></div><div class="stat-label">대외 활동</div></a>
     </div>
   </div>
 </section>
