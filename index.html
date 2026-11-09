@@ -1531,15 +1531,34 @@ function renderEntries(rows) {
   `).join('');
 }
 
-/* 목록 불러오기: GET /api/guestbook */
-async function loadEntries() {
-  try {
-    const res = await fetch(API_URL, { method: 'GET' });
-    if (!res.ok) throw new Error('서버 응답 오류');
-    const data = await res.json();
-    renderEntries(data.entries);
-  } catch (err) {
-    listEl.innerHTML = '<div class="gb-empty">메시지를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
+/* 목록 불러오기: GET /api/guestbook (자동 재시도 포함) */
+async function loadEntries(retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      /* 캐시 우회: 매 요청마다 고유 쿼리를 붙여 항상 최신 목록을 받음 */
+      const res = await fetch(`${API_URL}?t=${Date.now()}`, {
+        method: 'GET',
+        cache: 'no-store'
+      });
+      if (!res.ok) throw new Error('서버 응답 오류 ' + res.status);
+      const data = await res.json();
+      renderEntries(data.entries);
+      return; // 성공하면 종료
+    } catch (err) {
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, 800)); // 잠깐 기다렸다 재시도
+        continue;
+      }
+      /* 모든 재시도 실패: 수동 다시 시도 버튼 제공 */
+      listEl.innerHTML =
+        '<div class="gb-empty">메시지를 불러오지 못했습니다. ' +
+        '<button type="button" id="gbRetry" class="project-toggle" style="margin-top:10px;">다시 시도</button></div>';
+      const retryBtn = document.getElementById('gbRetry');
+      if (retryBtn) retryBtn.addEventListener('click', () => {
+        listEl.innerHTML = '<div class="gb-empty">불러오는 중...</div>';
+        loadEntries();
+      });
+    }
   }
 }
 
