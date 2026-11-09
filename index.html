@@ -481,6 +481,58 @@ section.content-section {
   font-weight: 700;
 }
 
+/* 설명이 달린 태그 (용어 툴팁) */
+.tag[data-desc] {
+  position: relative;
+  cursor: help;
+  border-style: dashed;
+}
+.tag[data-desc]::after {
+  content: attr(data-desc);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(6px);
+  width: max-content;
+  max-width: 240px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 5;
+}
+.tag[data-desc]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  transform: translateX(-50%) translateY(6px);
+  border: 6px solid transparent;
+  border-top-color: var(--border);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 5;
+}
+.tag[data-desc]:hover::after,
+.tag[data-desc]:focus::after,
+.tag[data-desc]:hover::before,
+.tag[data-desc]:focus::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.tag[data-desc]:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
 /* ===== Projects ===== */
 .card-grid {
   display: grid;
@@ -969,9 +1021,9 @@ footer {
         </p>
         <div class="project-category">BUSINESS STRATEGY / SALES ANALYSIS</div>
         <div class="tags">
-          <span class="tag">매출 분석</span>
-          <span class="tag">상권 분석</span>
-          <span class="tag">LSM</span>
+          <span class="tag" tabindex="0" data-desc="매출 데이터를 기간·요일·시간대 등으로 쪼개어 패턴과 문제를 찾는 분석">매출 분석</span>
+          <span class="tag" tabindex="0" data-desc="매장 주변 지역의 유동인구, 경쟁 매장, 고객 특성 등을 조사해 입지와 전략을 파악하는 것">상권 분석</span>
+          <span class="tag" tabindex="0" data-desc="LSM(Local Store Marketing): 매장 단위로 주변 상권에 맞춰 진행하는 지역 밀착형 마케팅">LSM</span>
         </div>
         <button class="project-toggle" type="button" aria-expanded="false">자세히 보기 <span class="chevron">▾</span></button>
         <div class="project-detail">
@@ -999,7 +1051,7 @@ footer {
         <div class="project-category">AI / SERVICE INNOVATION</div>
         <div class="tags">
           <span class="tag">AI</span>
-          <span class="tag">서비스 기획</span>
+          <span class="tag" tabindex="0" data-desc="사용자의 불편을 파악해 서비스의 흐름과 기능을 설계하는 일">서비스 기획</span>
           <span class="tag">문제 해결</span>
         </div>
         <button class="project-toggle" type="button" aria-expanded="false">자세히 보기 <span class="chevron">▾</span></button>
@@ -1026,9 +1078,9 @@ footer {
         </p>
         <div class="project-category">ESG / AI BUSINESS</div>
         <div class="tags">
-          <span class="tag">ESG</span>
+          <span class="tag" tabindex="0" data-desc="ESG(Environmental·Social·Governance): 환경·사회·지배구조를 함께 고려하는 지속가능 경영 방식">ESG</span>
           <span class="tag">AI</span>
-          <span class="tag">경영 전략</span>
+          <span class="tag" tabindex="0" data-desc="기업의 목표 달성을 위해 자원과 방향을 정하는 큰 틀의 계획">경영 전략</span>
         </div>
         <button class="project-toggle" type="button" aria-expanded="false">자세히 보기 <span class="chevron">▾</span></button>
         <div class="project-detail">
@@ -1054,9 +1106,9 @@ footer {
         </p>
         <div class="project-category">MARKETING / CONSUMER RESEARCH</div>
         <div class="tags">
-          <span class="tag">FGI</span>
-          <span class="tag">시장 조사</span>
-          <span class="tag">포지셔닝</span>
+          <span class="tag" tabindex="0" data-desc="FGI(Focus Group Interview): 소수의 대상자를 모아 심층적으로 의견을 듣는 정성 조사 방법">FGI</span>
+          <span class="tag" tabindex="0" data-desc="고객의 니즈와 경쟁 상황 등 시장 정보를 체계적으로 수집·분석하는 것">시장 조사</span>
+          <span class="tag" tabindex="0" data-desc="포지셔닝(Positioning): 소비자 인식 속에서 브랜드가 차지할 위치를 정하는 전략">포지셔닝</span>
         </div>
         <button class="project-toggle" type="button" aria-expanded="false">자세히 보기 <span class="chevron">▾</span></button>
         <div class="project-detail">
